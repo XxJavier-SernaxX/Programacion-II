@@ -47,7 +47,3 @@ Este sistema busca optimizar la administración de la EPS, garantizando un mejor
 - Atributos: nombre, lista de pacientes, lista de doctores, lista de servicios.  
 - Métodos: registrar paciente, contratar doctor, consultar pacientes de la EPS, consultar doctores de la EPS.
 
-
-prueba
-### esta es una actualizacion de readme 
-    en la rama feature-docu
