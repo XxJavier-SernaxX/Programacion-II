@@ -14,7 +14,7 @@ public class App extends Application {
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("gui/main.fxml"));
         scene = new Scene(fxmlLoader.load(), 800, 600);
-        stage.setTitle("Sistema EPS - Gestión Médica");
+        stage.setTitle("Sistema EPS - Gesti\u00F3n M\u00E9dica");
         try {
             stage.getIcons().add(new javafx.scene.image.Image(App.class.getResourceAsStream("gui/icon.png")));
         } catch (Exception e) {

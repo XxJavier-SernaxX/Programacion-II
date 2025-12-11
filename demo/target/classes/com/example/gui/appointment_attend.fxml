@@ -26,13 +26,29 @@
                 <padding>
                     <Insets left="20.0" />
                 </padding>
+                
                 <Label text="Diagnóstico:" />
-                <TextArea fx:id="diagnosisArea" prefHeight="100.0" wrapText="true" />
+                <TextArea fx:id="diagnosisArea" prefHeight="80.0" wrapText="true" />
                 
                 <Label text="Tratamiento:" />
-                <TextArea fx:id="treatmentArea" prefHeight="100.0" wrapText="true" />
+                <TextArea fx:id="treatmentArea" prefHeight="80.0" wrapText="true" />
+
+                <!-- Prescription Section -->
+                <Separator />
+                <Label text="Formular Medicamentos:" style="-fx-font-weight: bold;"/>
+                <HBox spacing="10.0" alignment="CENTER_LEFT">
+                    <ComboBox fx:id="medsCombo" promptText="Medicamento" prefWidth="200.0"/>
+                    <TextField fx:id="medQtyField" promptText="Cantidad" prefWidth="80.0"/>
+                    <Button text="Agregar" onAction="#onAddMed"/>
+                </HBox>
+                <TableView fx:id="prescribedMedsTable" prefHeight="150.0">
+                    <columns>
+                        <TableColumn fx:id="colMedName" text="Medicamento" prefWidth="150.0"/>
+                        <TableColumn fx:id="colMedQty" text="Cant." prefWidth="80.0"/>
+                    </columns>
+                </TableView>
                 
-                <Button fx:id="finishButton" mnemonicParsing="false" onAction="#onAttend" styleClass="action-button" text="Finalizar Cita &amp; Guardar Historia" disable="true"/>
+                <Button fx:id="finishButton" mnemonicParsing="false" onAction="#onAttend" styleClass="action-button" text="Finalizar Cita &amp; Guardar Historia" disable="true" maxWidth="Infinity"/>
             </VBox>
         </center>
     </BorderPane>

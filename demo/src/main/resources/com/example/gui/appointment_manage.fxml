@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="TOP_CENTER" spacing="15.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.gui.AppointmentManageController">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+
+    <Label styleClass="header-label" text="Gestionar Citas (Modificar / Cancelar)" />
+
+    <TableView fx:id="appointmentsTable" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="colDate" prefWidth="150.0" text="Fecha/Hora" />
+            <TableColumn fx:id="colPatient" prefWidth="150.0" text="Paciente" />
+            <TableColumn fx:id="colDoctor" prefWidth="150.0" text="Doctor" />
+            <TableColumn fx:id="colStatus" prefWidth="100.0" text="Estado" />
+            <TableColumn fx:id="colReason" prefWidth="150.0" text="Motivo" />
+        </columns>
+    </TableView>
+
+    <HBox spacing="10.0" alignment="CENTER">
+        <Button text="Cancelar Cita" onAction="#onCancel" style="-fx-base: #ffcccc;"/>
+        <Separator orientation="VERTICAL" />
+        <VBox spacing="5.0" alignment="CENTER_LEFT">
+            <Label text="Reprogramar:" style="-fx-font-weight: bold;"/>
+            <HBox spacing="5.0">
+                <DatePicker fx:id="newDatePicker" promptText="Nueva Fecha"/>
+                <TextField fx:id="newTimeField" promptText="HH:mm" prefWidth="80.0"/>
+            </HBox>
+            <Button text="Guardar Cambios" onAction="#onModify"/>
+        </VBox>
+    </HBox>
+</VBox>

@@ -24,6 +24,8 @@
             <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onAgendarCitaClick" styleClass="button" text="Agendar Cita" />
             <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onHistoriaClinicaClick" styleClass="button" text="Historia Clínica" />
             <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onAtenderCitaClick" styleClass="button" text="Atender Citas" />
+            <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onGestionarCitasClick" styleClass="button" text="Gestionar Citas" />
+            <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onInventarioClick" styleClass="button" text="Gestión Inventario" />
          </children>
          <padding>
             <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />

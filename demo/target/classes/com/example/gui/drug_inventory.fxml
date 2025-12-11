@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="TOP_CENTER" spacing="15.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.gui.DrugInventoryController">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+
+    <Label styleClass="header-label" text="Gestión de Inventario de Medicamentos" />
+
+    <HBox spacing="20.0">
+        <!-- List Section -->
+        <VBox spacing="10.0" HBox.hgrow="ALWAYS">
+            <Label text="Medicamentos Disponibles" />
+            <TableView fx:id="medsTable" prefHeight="400.0" prefWidth="500.0">
+                <columns>
+                    <TableColumn fx:id="colName" prefWidth="150.0" text="Nombre" />
+                    <TableColumn fx:id="colDose" prefWidth="120.0" text="Dosis" />
+                    <TableColumn fx:id="colQty" prefWidth="80.0" text="Cantidad" />
+                    <TableColumn fx:id="colExpiry" prefWidth="120.0" text="Vencimiento" />
+                </columns>
+            </TableView>
+        </VBox>
+
+        <!-- Form Section -->
+        <VBox spacing="10.0" prefWidth="300.0">
+            <TitledPane text="Agregar Nuevo Medicamento" collapsible="false">
+                <VBox spacing="10.0">
+                    <Label text="Nombre:" />
+                    <TextField fx:id="nameField" />
+                    
+                    <Label text="Dosis:" />
+                    <TextField fx:id="doseField" promptText="ej. 500mg" />
+                    
+                    <Label text="Cantidad Inicial:" />
+                    <TextField fx:id="qtyField" />
+                    
+                    <Label text="Fecha Vencimiento:" />
+                    <DatePicker fx:id="expiryPicker" maxWidth="Infinity" />
+                    
+                    <Button text="Agregar Medicamento" onAction="#onAdd" maxWidth="Infinity" styleClass="action-button"/>
+                </VBox>
+            </TitledPane>
+
+            <Separator />
+
+            <TitledPane text="Actualizar Stock" collapsible="false">
+                <VBox spacing="10.0">
+                    <Label text="Medicamento Seleccionado:" />
+                    <Label fx:id="selectedMedLabel" text="Ninguno" style="-fx-font-weight: bold;"/>
+                    
+                    <Label text="Nueva Cantidad:" />
+                    <TextField fx:id="newStockField" />
+                    
+                    <Button text="Actualizar Stock" onAction="#onUpdateStock" maxWidth="Infinity" />
+                </VBox>
+            </TitledPane>
+        </VBox>
+    </HBox>
+</VBox>

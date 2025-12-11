@@ -56,6 +56,7 @@
                   <Font name="System Bold" size="14.0" />
                </font>
             </Label>
+            <Label fx:id="scheduleLabel" text="Seleccione un doctor para ver su horario general." wrapText="true" style="-fx-text-fill: #666; -fx-font-style: italic;" />
             <ListView fx:id="availabilityList" VBox.vgrow="ALWAYS" />
          </children>
       </VBox>

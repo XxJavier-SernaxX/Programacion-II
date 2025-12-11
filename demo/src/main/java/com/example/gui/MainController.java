@@ -22,6 +22,90 @@ public class MainController {
     public MainController() {
         EPS eps = new EPS("MiEPS");
         this.service = new EPSService(eps);
+        inicializarDatosPrueba();
+    }
+
+    private void inicializarDatosPrueba() {
+        // Doctores
+        service.registrarDoctor(new com.example.Doctor("DOC001", "Dr. Gregory House", "General"));
+        service.registrarDoctor(new com.example.Doctor("DOC002", "Dra. Meredith Grey", "General"));
+        service.registrarDoctor(new com.example.Doctor("DOC003", "Dr. Derek Shepherd", "Neurología")); // Example,
+                                                                                                       // though not in
+                                                                                                       // predefined
+                                                                                                       // list
+        service.registrarDoctor(new com.example.Doctor("DOC004", "Dr. Strange", "Opt\u00F3metria"));
+
+        // Pacientes
+        service.registrarPaciente(
+                new com.example.Paciente("1001", "Pepito Pérez", 30, "Calle 123", "555-0101", "Sanitas"));
+        service.registrarPaciente(
+                new com.example.Paciente("1002", "María López", 25, "Carrera 45", "555-0102", "Sura"));
+        service.registrarPaciente(
+                new com.example.Paciente("1003", "Juan Rodriguez", 45, "Av Siempre Viva", "555-0103", "Compensar"));
+        service.registrarPaciente(
+                new com.example.Paciente("1004", "Ana García", 60, "Calle False 123", "555-0104", "Famisanar"));
+
+        // Medicamentos
+        // Names: Acetaminofén, Ibuprofeno, Amoxicilina, Loratadina, Omeprazol,
+        // Losartán, Salbutamol, Metformina
+        java.time.LocalDate exp = java.time.LocalDate.now().plusYears(1);
+        service.agregarMedicamento(new com.example.Medicamento("Acetaminofén", "500mg", 100, exp));
+        service.agregarMedicamento(new com.example.Medicamento("Ibuprofeno", "400mg", 50, exp));
+        service.agregarMedicamento(new com.example.Medicamento("Amoxicilina", "500mg", 30, exp));
+        service.agregarMedicamento(new com.example.Medicamento("Loratadina", "10mg", 100, exp));
+        service.agregarMedicamento(new com.example.Medicamento("Omeprazol", "20mg", 60, exp));
+        service.agregarMedicamento(new com.example.Medicamento("Losartán", "50mg", 40, exp));
+        service.agregarMedicamento(new com.example.Medicamento("Salbutamol", "Inhalador", 20, exp));
+        service.agregarMedicamento(new com.example.Medicamento("Metformina", "850mg", 80, exp));
+
+        // Historias Clínicas (Crear citas futuras cercanas y atenderlas inmediatamente
+        // para generar historial)
+        try {
+            // Find IDs
+            java.util.UUID docId = service.listarDoctores().stream().filter(d -> d.getNombre().contains("House"))
+                    .findFirst().orElse(
+                            service.listarDoctores().stream().findFirst().get())
+                    .getId();
+
+            // Paciente 1: Pepito -> Historia de Gripe
+            java.util.UUID pacId1 = service.listarPacientes().stream().filter(p -> p.getNombre().contains("Pepito"))
+                    .findFirst().get().getId();
+            java.time.LocalDateTime date1 = java.time.LocalDateTime.now().plusHours(1); // Future to pass validation
+
+            var cita1Opt = service.crearCita(pacId1, docId, date1, java.time.Duration.ofMinutes(30),
+                    "Malestar general");
+            if (cita1Opt.isPresent()) {
+                // Prescribe Ibuprofeno
+                java.util.UUID ibuId = service.listarMedicamentos().stream()
+                        .filter(m -> m.getNombre().contains("Ibuprofeno")).findFirst().get().getId();
+                java.util.List<com.example.HistoriaClinica.MedicamentoPrescrito> meds = new java.util.ArrayList<>();
+                meds.add(new com.example.HistoriaClinica.MedicamentoPrescrito(ibuId, 10));
+
+                service.atenderCita(cita1Opt.get().getId(), "Gripe Estacional", "Reposo y líquidos", meds);
+            }
+
+            // Paciente 2: Maria -> Historia de Migraña
+            java.util.UUID pacId2 = service.listarPacientes().stream().filter(p -> p.getNombre().contains("María"))
+                    .findFirst().get().getId();
+            java.time.LocalDateTime date2 = java.time.LocalDateTime.now().plusHours(2);
+
+            var cita2Opt = service.crearCita(pacId2, docId, date2, java.time.Duration.ofMinutes(30),
+                    "Dolor de cabeza fuerte");
+            if (cita2Opt.isPresent()) {
+                // Prescribe Acetaminofen
+                java.util.UUID acetId = service.listarMedicamentos().stream()
+                        .filter(m -> m.getNombre().contains("Acetaminofén")).findFirst().get().getId();
+                java.util.List<com.example.HistoriaClinica.MedicamentoPrescrito> meds = new java.util.ArrayList<>();
+                meds.add(new com.example.HistoriaClinica.MedicamentoPrescrito(acetId, 2));
+
+                service.atenderCita(cita2Opt.get().getId(), "Migraña Tensional",
+                        "Evitar luz fuerte, Acetaminofén cada 8h", meds);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     @FXML
@@ -69,6 +153,16 @@ public class MainController {
         cargarVista("appointment_attend.fxml");
     }
 
+    @FXML
+    protected void onInventarioClick() {
+        cargarVista("drug_inventory.fxml");
+    }
+
+    @FXML
+    protected void onGestionarCitasClick() {
+        cargarVista("appointment_manage.fxml");
+    }
+
     private void cargarVista(String fxmlFile) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
@@ -91,6 +185,10 @@ public class MainController {
                 ((HistoryController) controller).setService(this.service);
             } else if (controller instanceof AppointmentAttendController) {
                 ((AppointmentAttendController) controller).setService(this.service);
+            } else if (controller instanceof DrugInventoryController) {
+                ((DrugInventoryController) controller).setService(this.service);
+            } else if (controller instanceof AppointmentManageController) {
+                ((AppointmentManageController) controller).setService(this.service);
             }
 
             // Poner la vista en el centro del BorderPane

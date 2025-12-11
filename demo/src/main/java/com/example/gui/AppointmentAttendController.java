@@ -1,14 +1,14 @@
 package com.example.gui;
 
-import com.example.Cita;
-import com.example.Doctor;
-import com.example.EPSService;
-import com.example.Paciente;
+import com.example.*;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.util.StringConverter;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -28,9 +28,24 @@ public class AppointmentAttendController {
     @FXML
     private Button finishButton;
 
+    // Prescription UI
+    @FXML
+    private ComboBox<Medicamento> medsCombo;
+    @FXML
+    private TextField medQtyField;
+    @FXML
+    private TableView<HistoriaClinica.MedicamentoPrescrito> prescribedMedsTable;
+    @FXML
+    private TableColumn<HistoriaClinica.MedicamentoPrescrito, String> colMedName;
+    @FXML
+    private TableColumn<HistoriaClinica.MedicamentoPrescrito, Integer> colMedQty;
+
+    private final List<HistoriaClinica.MedicamentoPrescrito> tempPrescriptions = new ArrayList<>();
+
     public void setService(EPSService service) {
         this.service = service;
         loadDoctors();
+        loadMeds();
     }
 
     private void loadDoctors() {
@@ -50,6 +65,27 @@ public class AppointmentAttendController {
         });
     }
 
+    private void loadMeds() {
+        if (service == null)
+            return;
+        // Only load meds with stock > 0
+        List<Medicamento> availableMeds = service.listarMedicamentos().stream()
+                .filter(m -> m.getCantidadDisponible() > 0)
+                .collect(Collectors.toList());
+        medsCombo.setItems(FXCollections.observableArrayList(availableMeds));
+        medsCombo.setConverter(new StringConverter<Medicamento>() {
+            @Override
+            public String toString(Medicamento m) {
+                return m == null ? "" : m.getNombre() + " (" + m.getDosis() + ") - Stock: " + m.getCantidadDisponible();
+            }
+
+            @Override
+            public Medicamento fromString(String string) {
+                return null;
+            }
+        });
+    }
+
     @FXML
     public void initialize() {
         // Enable finish button only when an appointment is selected
@@ -59,6 +95,8 @@ public class AppointmentAttendController {
             if (!selected) {
                 diagnosisArea.clear();
                 treatmentArea.clear();
+                tempPrescriptions.clear();
+                prescribedMedsTable.getItems().clear();
             }
         });
 
@@ -80,6 +118,16 @@ public class AppointmentAttendController {
                 }
             }
         });
+
+        // Setup Prescription Table
+        colMedName.setCellValueFactory(cell -> {
+            // Find med name manually since MedicamentoPrescrito only has ID
+            Optional<Medicamento> m = service.listarMedicamentos().stream()
+                    .filter(med -> med.getId().equals(cell.getValue().getMedicamentoId()))
+                    .findFirst();
+            return new SimpleStringProperty(m.map(Medicamento::getNombre).orElse("Unknown"));
+        });
+        colMedQty.setCellValueFactory(cell -> new SimpleIntegerProperty(cell.getValue().getCantidad()).asObject());
     }
 
     @FXML
@@ -102,6 +150,47 @@ public class AppointmentAttendController {
     }
 
     @FXML
+    protected void onAddMed() {
+        Medicamento m = medsCombo.getValue();
+        String qtyTxt = medQtyField.getText();
+
+        if (m == null || qtyTxt.isBlank()) {
+            mostrarAlerta(Alert.AlertType.WARNING, "Datos Faltantes", "Seleccione medicamento y cantidad.");
+            return;
+        }
+
+        try {
+            int qty = Integer.parseInt(qtyTxt);
+            if (qty <= 0) {
+                mostrarAlerta(Alert.AlertType.WARNING, "Cantidad Inválida", "La cantidad debe ser mayor a 0.");
+                return;
+            }
+            if (qty > m.getCantidadDisponible()) {
+                mostrarAlerta(Alert.AlertType.WARNING, "Stock Insuficiente",
+                        "Solo hay " + m.getCantidadDisponible() + " unidades disponibles.");
+                return;
+            }
+
+            // Check if already added
+            boolean exists = tempPrescriptions.stream().anyMatch(p -> p.getMedicamentoId().equals(m.getId()));
+            if (exists) {
+                mostrarAlerta(Alert.AlertType.WARNING, "Duplicado", "Ya agregó este medicamento a la lista.");
+                return;
+            }
+
+            HistoriaClinica.MedicamentoPrescrito pres = new HistoriaClinica.MedicamentoPrescrito(m.getId(), qty);
+            tempPrescriptions.add(pres);
+            prescribedMedsTable.setItems(FXCollections.observableArrayList(tempPrescriptions));
+
+            medQtyField.clear();
+            medsCombo.getSelectionModel().clearSelection();
+
+        } catch (NumberFormatException e) {
+            mostrarAlerta(Alert.AlertType.ERROR, "Error", "Cantidad inválida.");
+        }
+    }
+
+    @FXML
     protected void onAttend() {
         Cita selectedCita = appointmentsList.getSelectionModel().getSelectedItem();
         String diagnosis = diagnosisArea.getText();
@@ -115,16 +204,20 @@ public class AppointmentAttendController {
             return;
         }
 
-        boolean success = service.atenderCita(selectedCita.getId(), diagnosis, treatment, null); // No meds for now
+        boolean success = service.atenderCita(selectedCita.getId(), diagnosis, treatment,
+                new ArrayList<>(tempPrescriptions));
 
         if (success) {
             mostrarAlerta(Alert.AlertType.INFORMATION, "Cita Finalizada",
-                    "La cita ha sido registrada en la historia clínica.");
+                    "La cita ha sido registrada y medicamentos descontados.");
             diagnosisArea.clear();
             treatmentArea.clear();
-            onDoctorSelect(); // Refresh list
+            tempPrescriptions.clear();
+            prescribedMedsTable.getItems().clear();
+            loadMeds(); // Refresh stock in combo
+            onDoctorSelect(); // Refresh appointments
         } else {
-            mostrarAlerta(Alert.AlertType.ERROR, "Error", "No se pudo finalizar la cita.");
+            mostrarAlerta(Alert.AlertType.ERROR, "Error", "No se pudo finalizar la cita (verifique stock o estado).");
         }
     }
 

@@ -86,6 +86,9 @@ public class AppointmentController {
     }
 
     @FXML
+    private Label scheduleLabel;
+
+    @FXML
     protected void onCheckAvailability() {
         Doctor doctor = doctorCombo.getValue();
         LocalDate date = datePicker.getValue();
@@ -95,6 +98,21 @@ public class AppointmentController {
             mostrarAlerta(Alert.AlertType.WARNING, "Datos incompletos", "Seleccione doctor, fecha y duración.");
             return;
         }
+
+        // Show general schedule
+        StringBuilder sb = new StringBuilder("Horario General:\n");
+        for (java.time.DayOfWeek d : java.time.DayOfWeek.values()) {
+            List<Doctor.Horario> horarios = doctor.getHorariosDelDia(d);
+            if (!horarios.isEmpty()) {
+                sb.append(d).append(": ");
+                for (Doctor.Horario h : horarios) {
+                    sb.append(h).append(" ");
+                }
+                sb.append("\n");
+            }
+        }
+        if (scheduleLabel != null)
+            scheduleLabel.setText(sb.toString());
 
         try {
             int mins = Integer.parseInt(durTxt);
