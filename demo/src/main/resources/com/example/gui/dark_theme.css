@@ -1,0 +1,103 @@
+/* Dark Mode Theme */
+.root {
+    -fx-base: #2C3E50;
+    -fx-background-color: #2C3E50;
+    /* Dark Slate Blue */
+    background-color: #2C3E50;
+    -fx-control-inner-background: #34495E;
+    -fx-text-fill: #ECF0F1;
+    color: #ECF0F1;
+}
+
+.label {
+    -fx-text-fill: #ECF0F1;
+    /* White/Grey Text */
+    color: #ECF0F1;
+}
+
+.label-title {
+    -fx-text-fill: #3498DB;
+    /* Keep Blue for titles but brighter */
+    color: #3498DB;
+}
+
+.label-subtitle {
+    -fx-text-fill: #BDC3C7;
+    color: #BDC3C7;
+}
+
+/* Sidebar */
+.vbox-sidebar {
+    -fx-background-color: #34495E;
+    background-color: #34495E;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.5), 10, 0, 0, 0);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+/* Cards */
+.content-card {
+    -fx-background-color: #34495E;
+    background-color: #34495E;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.5), 5, 0, 0, 2);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+/* Inputs */
+.text-field,
+.text-area,
+.combo-box,
+.date-picker {
+    -fx-background-color: #2C3E50;
+    background-color: #2C3E50;
+    -fx-text-fill: #FFFFFF;
+    color: #FFFFFF;
+    -fx-prompt-text-fill: #95A5A6;
+    -fx-border-color: #7F8C8D;
+    border-color: #7F8C8D;
+}
+
+.text-field:focused,
+.text-area:focused {
+    -fx-border-color: #3498DB;
+    border-color: #3498DB;
+}
+
+/* Lists and Tables */
+.list-cell,
+.table-cell {
+    -fx-text-fill: #ECF0F1;
+    color: #ECF0F1;
+    -fx-background-color: #34495E;
+    background-color: #34495E;
+}
+
+.list-cell:even,
+.table-row-cell:even {
+    -fx-background-color: #2C3E50;
+    background-color: #2C3E50;
+}
+
+.list-cell:filled:selected,
+.table-row-cell:filled:selected {
+    -fx-background-color: #2980B9;
+    background-color: #2980B9;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: #2C3E50;
+    background-color: #2C3E50;
+}
+
+.table-view .column-header .label {
+    -fx-text-fill: #ECF0F1;
+}
+
+/* Buttons */
+.button {
+    -fx-background-color: #2980B9;
+    -fx-text-fill: white;
+}
+
+.button:hover {
+    -fx-background-color: #3498DB;
+}

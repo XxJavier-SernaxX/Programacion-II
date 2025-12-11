@@ -5,30 +5,59 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" spacing="20.0" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+<VBox alignment="CENTER" spacing="20.0" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.gui.WelcomeController">
    <children>
-      <VBox alignment="CENTER" maxWidth="600.0" spacing="15.0" styleClass="content-card">
+      <VBox alignment="CENTER" maxWidth="700.0" spacing="15.0" styleClass="content-card">
          <children>
             <Label styleClass="label-title" text="Bienvenido al Sistema EPS" />
-            <Label text="Sistema Integral de Gestión de Citas Médicas y Pacientes" textFill="#7f8c8d">
+            <Label text="Resumen del Sistema" textFill="#7f8c8d">
                <font>
                   <Font size="16.0" />
                </font>
             </Label>
-            <VBox spacing="10.0" style="-fx-background-color: #FDFEFE; -fx-padding: 20; -fx-background-radius: 8; -fx-border-color: #EBF5FB; -fx-border-radius: 8;">
+            
+            <!-- Statistics Cards -->
+            <javafx.scene.layout.HBox spacing="20.0" alignment="CENTER">
                <children>
-                  <Label text="Panel de Control:" textFill="#2980b9">
-                     <font>
-                        <Font name="System Bold" size="14.0" />
-                     </font>
-                  </Label>
-                  <Label text="• Gestión centralizada de Base de Datos." wrapText="true" />
-                  <Label text="• Programación inteligente de citas médicas." wrapText="true" />
-                  <Label text="• Historial clínico digitalizado." wrapText="true" />
-                  <Label text="• Acceso rápido a directorios de personal y usuarios." wrapText="true" />
+                  <!-- Card 1: Pacientes -->
+                  <VBox alignment="CENTER" spacing="5.0" style="-fx-background-color: #E8F8F5; -fx-padding: 15; -fx-background-radius: 10; -fx-min-width: 150;">
+                     <children>
+                        <Label text="Pacientes" textFill="#16A085">
+                           <font><Font name="System Bold" size="14.0" /></font>
+                        </Label>
+                        <Label fx:id="totalPatientsLabel" text="0" textFill="#0E6251">
+                           <font><Font name="System Bold" size="36.0" /></font>
+                        </Label>
+                     </children>
+                  </VBox>
+                  
+                  <!-- Card 2: Doctores -->
+                  <VBox alignment="CENTER" spacing="5.0" style="-fx-background-color: #EAF2F8; -fx-padding: 15; -fx-background-radius: 10; -fx-min-width: 150;">
+                     <children>
+                        <Label text="Doctores" textFill="#2980B9">
+                           <font><Font name="System Bold" size="14.0" /></font>
+                        </Label>
+                        <Label fx:id="totalDoctorsLabel" text="0" textFill="#154360">
+                           <font><Font name="System Bold" size="36.0" /></font>
+                        </Label>
+                     </children>
+                  </VBox>
+                  
+                  <!-- Card 3: Citas Hoy -->
+                  <VBox alignment="CENTER" spacing="5.0" style="-fx-background-color: #FEF9E7; -fx-padding: 15; -fx-background-radius: 10; -fx-min-width: 150;">
+                     <children>
+                        <Label text="Citas Hoy" textFill="#F39C12">
+                           <font><Font name="System Bold" size="14.0" /></font>
+                        </Label>
+                        <Label fx:id="todayAppointmentsLabel" text="0" textFill="#7E5109">
+                           <font><Font name="System Bold" size="36.0" /></font>
+                        </Label>
+                     </children>
+                  </VBox>
                </children>
-            </VBox>
-            <Label text="Seleccione una opción del menú lateral para comenzar." textFill="#95a5a6" />
+            </javafx.scene.layout.HBox>
+
+            <Label text="Seleccione una opción del menú lateral para comenzar." textFill="#95a5a6" style="-fx-padding: 20 0 0 0;" />
          </children>
          <padding>
             <Insets bottom="40.0" left="40.0" right="40.0" top="40.0" />

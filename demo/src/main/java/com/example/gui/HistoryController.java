@@ -52,9 +52,12 @@ public class HistoryController {
     }
 
     private void showHistory(Paciente p) {
+        System.out.println("DEBUG: showHistory called for " + p.getNombre());
         Optional<HistoriaClinica> opt = service.consultarHistoria(p.getId());
         if (opt.isEmpty() || opt.get().verHistorial().isEmpty()) {
+            System.out.println("DEBUG: No history found.");
             detailsArea.setText("No hay historia clínica registrada para este paciente.");
+            detailsArea.setStyle("-fx-text-fill: black;"); // Force color
             return;
         }
 
@@ -66,12 +69,28 @@ public class HistoryController {
 
         for (HistoriaClinica.Consulta c : opt.get().verHistorial()) {
             sb.append("Fecha: ").append(c.getFecha().format(fmt)).append("\n");
-            sb.append("Doctor ID: ").append(c.getDoctorId()).append("\n"); // Could look up name if needed
+
+            // Look up doctor details
+            java.util.Optional<com.example.Doctor> docOpt = service.listarDoctores().stream()
+                    .filter(d -> d.getId().equals(c.getDoctorId()))
+                    .findFirst();
+
+            if (docOpt.isPresent()) {
+                com.example.Doctor doc = docOpt.get();
+                sb.append("Doctor: ").append(doc.getNombre())
+                        .append(" (").append(doc.getEspecialidad()).append(")\n");
+            } else {
+                sb.append("Doctor ID: ").append(c.getDoctorId()).append("\n");
+            }
+
             sb.append("Diagnóstico: ").append(c.getDiagnostico()).append("\n");
             sb.append("Tratamiento: ").append(c.getTratamiento()).append("\n");
             sb.append("-------------------------------------\n");
         }
 
-        detailsArea.setText(sb.toString());
+        String finalContent = sb.toString();
+        System.out.println("DEBUG: Setting content:\n" + finalContent);
+        detailsArea.setText(finalContent);
+        detailsArea.setStyle("-fx-text-fill: black;"); // Force color
     }
 }

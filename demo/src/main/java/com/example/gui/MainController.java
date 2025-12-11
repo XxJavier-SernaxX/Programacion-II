@@ -27,13 +27,30 @@ public class MainController {
 
     private void inicializarDatosPrueba() {
         // Doctores
-        service.registrarDoctor(new com.example.Doctor("DOC001", "Dr. Gregory House", "General"));
-        service.registrarDoctor(new com.example.Doctor("DOC002", "Dra. Meredith Grey", "General"));
-        service.registrarDoctor(new com.example.Doctor("DOC003", "Dr. Derek Shepherd", "Neurología")); // Example,
-                                                                                                       // though not in
-                                                                                                       // predefined
-                                                                                                       // list
-        service.registrarDoctor(new com.example.Doctor("DOC004", "Dr. Strange", "Opt\u00F3metria"));
+        // Doctores
+        com.example.Doctor d1 = new com.example.Doctor("DOC001", "Dr. Gregory House", "General");
+        com.example.Doctor d2 = new com.example.Doctor("DOC002", "Dra. Meredith Grey", "General");
+        com.example.Doctor d3 = new com.example.Doctor("DOC003", "Dr. Derek Shepherd", "Neurología");
+        com.example.Doctor d4 = new com.example.Doctor("DOC004", "Dr. Strange", "Opt\u00F3metria");
+
+        // Add schedules (Monday to Friday, 8am - 5pm)
+        java.time.LocalTime start = java.time.LocalTime.of(8, 0);
+        java.time.LocalTime end = java.time.LocalTime.of(17, 0);
+        // Only Mon-Fri as per user request "horario de oficina de lunes a viernes"
+        for (java.time.DayOfWeek day : java.time.DayOfWeek.values()) {
+            if (day == java.time.DayOfWeek.SATURDAY || day == java.time.DayOfWeek.SUNDAY)
+                continue;
+
+            d1.agregarHorario(day, start, end);
+            d2.agregarHorario(day, start, end);
+            d3.agregarHorario(day, start, end);
+            d4.agregarHorario(day, start, end);
+        }
+
+        service.registrarDoctor(d1);
+        service.registrarDoctor(d2);
+        service.registrarDoctor(d3);
+        service.registrarDoctor(d4);
 
         // Pacientes
         service.registrarPaciente(
@@ -163,6 +180,21 @@ public class MainController {
         cargarVista("appointment_manage.fxml");
     }
 
+    @FXML
+    protected void onToggleTheme() {
+        if (mainLayout == null || mainLayout.getScene() == null)
+            return;
+
+        var stylesheets = mainLayout.getScene().getStylesheets();
+        String darkThemePath = getClass().getResource("dark_theme.css").toExternalForm();
+
+        if (stylesheets.contains(darkThemePath)) {
+            stylesheets.remove(darkThemePath);
+        } else {
+            stylesheets.add(darkThemePath);
+        }
+    }
+
     private void cargarVista(String fxmlFile) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
@@ -189,6 +221,8 @@ public class MainController {
                 ((DrugInventoryController) controller).setService(this.service);
             } else if (controller instanceof AppointmentManageController) {
                 ((AppointmentManageController) controller).setService(this.service);
+            } else if (controller instanceof WelcomeController) {
+                ((WelcomeController) controller).setService(this.service);
             }
 
             // Poner la vista en el centro del BorderPane

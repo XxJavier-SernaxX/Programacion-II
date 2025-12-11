@@ -94,28 +94,55 @@ public class AppointmentController {
         LocalDate date = datePicker.getValue();
         String durTxt = durationField.getText();
 
-        if (doctor == null || date == null || durTxt.isBlank()) {
-            mostrarAlerta(Alert.AlertType.WARNING, "Datos incompletos", "Seleccione doctor, fecha y duración.");
+        // RF Update: Allow checking general schedule without date
+        if (doctor == null) {
+            mostrarAlerta(Alert.AlertType.WARNING, "Datos incompletos", "Seleccione un doctor.");
             return;
         }
 
         // Show general schedule
-        StringBuilder sb = new StringBuilder("Horario General:\n");
+        StringBuilder sb = new StringBuilder("Horario General de " + doctor.getNombre() + ":\n");
+        boolean hasSchedule = false;
+
+        // Helper for Spanish day names
+        java.time.format.TextStyle style = java.time.format.TextStyle.FULL;
+        java.util.Locale es = new java.util.Locale("es", "ES");
+
         for (java.time.DayOfWeek d : java.time.DayOfWeek.values()) {
             List<Doctor.Horario> horarios = doctor.getHorariosDelDia(d);
             if (!horarios.isEmpty()) {
-                sb.append(d).append(": ");
+                hasSchedule = true;
+                // Capitalize first letter
+                String dayName = d.getDisplayName(style, es);
+                dayName = dayName.substring(0, 1).toUpperCase() + dayName.substring(1);
+
+                sb.append(dayName).append(": ");
                 for (Doctor.Horario h : horarios) {
                     sb.append(h).append(" ");
                 }
                 sb.append("\n");
             }
         }
+        if (!hasSchedule) {
+            sb.append("No tiene horarios registrados.\n");
+        }
+
         if (scheduleLabel != null)
             scheduleLabel.setText(sb.toString());
 
+        // Validate duration for slots
+        int mins = 30;
         try {
-            int mins = Integer.parseInt(durTxt);
+            if (!durTxt.isBlank()) {
+                mins = Integer.parseInt(durTxt);
+            }
+        } catch (NumberFormatException e) {
+            mostrarAlerta(Alert.AlertType.ERROR, "Error", "Duración inválida.");
+            return;
+        }
+
+        // If date is selected, check specific availability
+        if (date != null) {
             List<String> slots = service.obtenerDisponibilidad(doctor.getId(), date, Duration.ofMinutes(mins));
             availabilityList.setItems(FXCollections.observableArrayList(slots));
 
@@ -123,8 +150,9 @@ public class AppointmentController {
                 mostrarAlerta(Alert.AlertType.INFORMATION, "Sin disponibilidad",
                         "No se encontraron horarios con los criterios.");
             }
-        } catch (NumberFormatException e) {
-            mostrarAlerta(Alert.AlertType.ERROR, "Error", "Duración inválida.");
+        } else {
+            // Clear or set hint
+            availabilityList.setItems(FXCollections.observableArrayList("Seleccione fecha para ver cupos."));
         }
     }
 
