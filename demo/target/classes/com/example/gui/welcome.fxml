@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="CENTER" spacing="20.0" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <VBox alignment="CENTER" maxWidth="600.0" spacing="15.0" styleClass="content-card">
+         <children>
+            <Label styleClass="label-title" text="Bienvenido al Sistema EPS" />
+            <Label text="Sistema Integral de Gestión de Citas Médicas y Pacientes" textFill="#7f8c8d">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <VBox spacing="10.0" style="-fx-background-color: #FDFEFE; -fx-padding: 20; -fx-background-radius: 8; -fx-border-color: #EBF5FB; -fx-border-radius: 8;">
+               <children>
+                  <Label text="Panel de Control:" textFill="#2980b9">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Label>
+                  <Label text="• Gestión centralizada de Base de Datos." wrapText="true" />
+                  <Label text="• Programación inteligente de citas médicas." wrapText="true" />
+                  <Label text="• Historial clínico digitalizado." wrapText="true" />
+                  <Label text="• Acceso rápido a directorios de personal y usuarios." wrapText="true" />
+               </children>
+            </VBox>
+            <Label text="Seleccione una opción del menú lateral para comenzar." textFill="#95a5a6" />
+         </children>
+         <padding>
+            <Insets bottom="40.0" left="40.0" right="40.0" top="40.0" />
+         </padding>
+      </VBox>
+   </children>
+   <padding>
+      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+   </padding>
+</VBox>

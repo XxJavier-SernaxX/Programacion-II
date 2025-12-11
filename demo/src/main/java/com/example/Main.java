@@ -6,6 +6,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Main {
+    @SuppressWarnings("resource")
     private static final Scanner sc = new Scanner(System.in);
     private static final DateTimeFormatter TIME_FMT = DateTimeFormatter.ofPattern("HH:mm");
     private static final DateTimeFormatter DATE_TIME_FMT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -140,7 +141,8 @@ public class Main {
                         System.out.println("⚠ Día inválido: " + dia + " (ignorando).");
                     }
                 }
-                System.out.println("✔ Horario agregado para días: " + dias.stream().map(Object::toString).collect(Collectors.joining(",")));
+                System.out.println("✔ Horario agregado para días: "
+                        + dias.stream().map(Object::toString).collect(Collectors.joining(",")));
             }
         }
         service.registrarDoctor(d);
@@ -148,13 +150,15 @@ public class Main {
     }
 
     private static List<Integer> parseListaEnteros(String s) {
-        if (s == null || s.isBlank()) return Collections.emptyList();
+        if (s == null || s.isBlank())
+            return Collections.emptyList();
         String[] parts = s.split(",");
         List<Integer> res = new ArrayList<>();
         for (String p : parts) {
             try {
                 res.add(Integer.parseInt(p.trim()));
-            } catch (Exception ignored) {}
+            } catch (Exception ignored) {
+            }
         }
         return res;
     }
@@ -217,7 +221,8 @@ public class Main {
                 return;
             }
             String franja = slots.get(sel - 1);
-            if (franja.equals("No hay espacio disponible") || franja.equals("El doctor NO trabaja este día") || franja.equals("Doctor no encontrado")) {
+            if (franja.equals("No hay espacio disponible") || franja.equals("El doctor NO trabaja este día")
+                    || franja.equals("Doctor no encontrado")) {
                 System.out.println("❌ " + franja);
                 return;
             }
@@ -251,15 +256,19 @@ public class Main {
             System.out.println("❌ No hay citas.");
             return;
         }
-        Map<UUID, Paciente> pacienteMap = service.listarPacientes().stream().collect(Collectors.toMap(Paciente::getId, p -> p));
-        Map<UUID, Doctor> doctorMap = service.listarDoctores().stream().collect(Collectors.toMap(Doctor::getId, d -> d));
+        Map<UUID, Paciente> pacienteMap = service.listarPacientes().stream()
+                .collect(Collectors.toMap(Paciente::getId, p -> p));
+        Map<UUID, Doctor> doctorMap = service.listarDoctores().stream()
+                .collect(Collectors.toMap(Doctor::getId, d -> d));
         for (int i = 0; i < citas.size(); i++) {
             Cita c = citas.get(i);
-            System.out.println((i + 1) + ") " + resumenCitaLegible(c, pacienteMap.get(c.getPacienteId()), doctorMap.get(c.getDoctorId())));
+            System.out.println((i + 1) + ") "
+                    + resumenCitaLegible(c, pacienteMap.get(c.getPacienteId()), doctorMap.get(c.getDoctorId())));
         }
         System.out.print("Seleccione cita: ");
         int idx = leerEntero() - 1;
-        if (idx < 0 || idx >= citas.size()) return;
+        if (idx < 0 || idx >= citas.size())
+            return;
         Cita c = citas.get(idx);
 
         LocalDate f = leerFecha();
@@ -280,13 +289,17 @@ public class Main {
             System.out.println("❌ No hay citas.");
             return;
         }
-        Map<UUID, Paciente> pacienteMap = service.listarPacientes().stream().collect(Collectors.toMap(Paciente::getId, p -> p));
-        Map<UUID, Doctor> doctorMap = service.listarDoctores().stream().collect(Collectors.toMap(Doctor::getId, d -> d));
+        Map<UUID, Paciente> pacienteMap = service.listarPacientes().stream()
+                .collect(Collectors.toMap(Paciente::getId, p -> p));
+        Map<UUID, Doctor> doctorMap = service.listarDoctores().stream()
+                .collect(Collectors.toMap(Doctor::getId, d -> d));
         for (int i = 0; i < citas.size(); i++)
-            System.out.println((i + 1) + ") " + resumenCitaLegible(citas.get(i), pacienteMap.get(citas.get(i).getPacienteId()), doctorMap.get(citas.get(i).getDoctorId())));
+            System.out.println((i + 1) + ") " + resumenCitaLegible(citas.get(i),
+                    pacienteMap.get(citas.get(i).getPacienteId()), doctorMap.get(citas.get(i).getDoctorId())));
         System.out.print("Seleccione cita: ");
         int idx = leerEntero() - 1;
-        if (idx < 0 || idx >= citas.size()) return;
+        if (idx < 0 || idx >= citas.size())
+            return;
         boolean ok = service.cancelarCita(citas.get(idx).getId());
         System.out.println(ok ? "✔ Cita cancelada." : "❌ No se pudo cancelar.");
     }
@@ -300,13 +313,17 @@ public class Main {
             System.out.println("❌ No hay citas pendientes.");
             return;
         }
-        Map<UUID, Paciente> pacienteMap = service.listarPacientes().stream().collect(Collectors.toMap(Paciente::getId, p -> p));
-        Map<UUID, Doctor> doctorMap = service.listarDoctores().stream().collect(Collectors.toMap(Doctor::getId, d -> d));
+        Map<UUID, Paciente> pacienteMap = service.listarPacientes().stream()
+                .collect(Collectors.toMap(Paciente::getId, p -> p));
+        Map<UUID, Doctor> doctorMap = service.listarDoctores().stream()
+                .collect(Collectors.toMap(Doctor::getId, d -> d));
         for (int i = 0; i < citas.size(); i++)
-            System.out.println((i + 1) + ") " + resumenCitaLegible(citas.get(i), pacienteMap.get(citas.get(i).getPacienteId()), doctorMap.get(citas.get(i).getDoctorId())));
+            System.out.println((i + 1) + ") " + resumenCitaLegible(citas.get(i),
+                    pacienteMap.get(citas.get(i).getPacienteId()), doctorMap.get(citas.get(i).getDoctorId())));
         System.out.print("Seleccione cita: ");
         int idx = leerEntero() - 1;
-        if (idx < 0 || idx >= citas.size()) return;
+        if (idx < 0 || idx >= citas.size())
+            return;
         Cita c = citas.get(idx);
         System.out.print("Diagnóstico: ");
         String diag = sc.nextLine();
@@ -327,7 +344,8 @@ public class Main {
             System.out.println((i + 1) + ") " + pacienteResumen(pacientes.get(i)));
         System.out.print("Seleccione paciente: ");
         int idx = leerEntero() - 1;
-        if (idx < 0 || idx >= pacientes.size()) return;
+        if (idx < 0 || idx >= pacientes.size())
+            return;
         Paciente paciente = pacientes.get(idx);
         var histOpt = service.consultarHistoria(paciente.getId());
         if (histOpt.isEmpty() || histOpt.get().verHistorial().isEmpty()) {
@@ -335,7 +353,8 @@ public class Main {
             return;
         }
         List<HistoriaClinica.Consulta> consultas = histOpt.get().verHistorial();
-        Map<UUID, Doctor> doctorMap = service.listarDoctores().stream().collect(Collectors.toMap(Doctor::getId, d -> d));
+        Map<UUID, Doctor> doctorMap = service.listarDoctores().stream()
+                .collect(Collectors.toMap(Doctor::getId, d -> d));
         System.out.println("\n--- HISTORIA CLÍNICA DE " + paciente.getNombre() + " ---");
         for (int i = 0; i < consultas.size(); i++) {
             HistoriaClinica.Consulta c = consultas.get(i);
@@ -359,7 +378,8 @@ public class Main {
     private static void listarPacientes(EPSService service) {
         System.out.println("\n=== LISTA DE PACIENTES ===");
         List<Paciente> list = new ArrayList<>(service.listarPacientes());
-        if (list.isEmpty()) System.out.println("❌ No hay pacientes.");
+        if (list.isEmpty())
+            System.out.println("❌ No hay pacientes.");
         else {
             for (int i = 0; i < list.size(); i++)
                 System.out.println((i + 1) + ") " + pacienteResumen(list.get(i)));
@@ -369,13 +389,13 @@ public class Main {
     private static void listarDoctores(EPSService service) {
         System.out.println("\n=== LISTA DE DOCTORES ===");
         List<Doctor> list = new ArrayList<>(service.listarDoctores());
-        if (list.isEmpty()) System.out.println("❌ No hay doctores.");
+        if (list.isEmpty())
+            System.out.println("❌ No hay doctores.");
         else {
             for (int i = 0; i < list.size(); i++) {
                 Doctor d = list.get(i);
                 System.out.println((i + 1) + ") " + doctorResumen(d));
                 // mostrar horarios brevemente
-                var dias = d.getHorariosDelDia(DayOfWeek.MONDAY); // no iterate all; but we can show per día if you wish
                 // (omitir detalle aquí para no saturar)
             }
         }
@@ -392,7 +412,8 @@ public class Main {
     }
 
     private static String resumenCitaLegible(Cita c, Paciente p, Doctor d) {
-        String pacienteTxt = (p == null) ? c.getPacienteId().toString() : (p.getIdentificacion() + " - " + p.getNombre());
+        String pacienteTxt = (p == null) ? c.getPacienteId().toString()
+                : (p.getIdentificacion() + " - " + p.getNombre());
         String doctorTxt = (d == null) ? c.getDoctorId().toString() : (d.getIdentificacion() + " - " + d.getNombre());
         return String.format("%s | %s -> %s | %s | %s",
                 c.getFechaHora().format(DATE_TIME_FMT),

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox alignment="TOP_CENTER" spacing="15.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.gui.AppointmentAttendController">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+
+    <Label styleClass="header-label" text="Atender Citas" />
+
+    <BorderPane>
+        <left>
+            <VBox spacing="10.0" BorderPane.alignment="CENTER">
+                <Label text="Seleccionar Doctor:" />
+                <ComboBox fx:id="doctorCombo" onAction="#onDoctorSelect" prefWidth="250.0" promptText="Elija un doctor..." />
+                
+                <Label text="Citas Pendientes:" />
+                <ListView fx:id="appointmentsList" prefHeight="300.0" prefWidth="250.0" />
+            </VBox>
+        </left>
+        <center>
+            <VBox spacing="10.0" BorderPane.alignment="CENTER">
+                <padding>
+                    <Insets left="20.0" />
+                </padding>
+                <Label text="Diagnóstico:" />
+                <TextArea fx:id="diagnosisArea" prefHeight="100.0" wrapText="true" />
+                
+                <Label text="Tratamiento:" />
+                <TextArea fx:id="treatmentArea" prefHeight="100.0" wrapText="true" />
+                
+                <Button fx:id="finishButton" mnemonicParsing="false" onAction="#onAttend" styleClass="action-button" text="Finalizar Cita &amp; Guardar Historia" disable="true"/>
+            </VBox>
+        </center>
+    </BorderPane>
+</VBox>

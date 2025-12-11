@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="TOP_CENTER" spacing="20.0" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.gui.AppointmentController">
+    <padding>
+        <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
+    </padding>
+   <children>
+      <Label styleClass="label-title" text="Agendar Cita Nueva" />
+      <GridPane hgap="15.0" vgap="15.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="150.0" minWidth="10.0" prefWidth="120.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="300.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="35.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="35.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="35.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="35.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="35.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Label text="Paciente:" />
+            <ComboBox fx:id="patientCombo" maxWidth="1.7976931348623157E308" promptText="Seleccione Paciente" GridPane.columnIndex="1" />
+            
+            <Label text="Doctor:" GridPane.rowIndex="1" />
+            <ComboBox fx:id="doctorCombo" maxWidth="1.7976931348623157E308" promptText="Seleccione Doctor" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            
+            <Label text="Fecha:" GridPane.rowIndex="2" />
+            <DatePicker fx:id="datePicker" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            
+            <Label text="Duración (min):" GridPane.rowIndex="3" />
+            <TextField fx:id="durationField" text="30" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            
+            <Button fx:id="checkButton" mnemonicParsing="false" onAction="#onCheckAvailability" text="Consultar Disponibilidad" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+         </children>
+      </GridPane>
+      
+      <VBox prefHeight="200.0" spacing="5.0">
+         <children>
+            <Label text="Horarios Disponibles:">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
+            <ListView fx:id="availabilityList" VBox.vgrow="ALWAYS" />
+         </children>
+      </VBox>
+      
+      <HBox alignment="CENTER" spacing="10.0">
+         <children>
+            <Label text="Motivo:" />
+            <TextField fx:id="reasonField" prefWidth="250.0" promptText="Motivo de la consulta" />
+         </children>
+      </HBox>
+      
+      <Button fx:id="bookButton" mnemonicParsing="false" onAction="#onBook" styleClass="button-success" text="Confirmar Agendamiento">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Button>
+   </children>
+</VBox>

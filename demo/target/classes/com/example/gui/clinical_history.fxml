@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="500.0" prefWidth="700.0" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.gui.HistoryController">
+   <children>
+      <VBox spacing="5.0" style="-fx-background-color: #FFFFFF; -fx-padding: 15;">
+         <children>
+            <Label styleClass="label-title" text="Consulta de Historia Clínica" />
+            <Label text="Seleccione un paciente de la lista para ver su historial." textFill="#7f8c8d" />
+         </children>
+      </VBox>
+      <SplitPane dividerPositions="0.3" VBox.vgrow="ALWAYS">
+         <items>
+            <VBox spacing="10.0">
+               <children>
+                  <Label styleClass="label-subtitle" text="Pacientes" />
+                  <ListView fx:id="patientList" VBox.vgrow="ALWAYS" />
+               </children>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+            </VBox>
+            <VBox spacing="10.0">
+               <children>
+                  <Label styleClass="label-subtitle" text="Detalle de Historia" />
+                  <TextArea fx:id="detailsArea" editable="false" wrapText="true" VBox.vgrow="ALWAYS">
+                     <font>
+                        <Font name="Segoe UI" size="14.0" />
+                     </font>
+                  </TextArea>
+               </children>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+            </VBox>
+         </items>
+      </SplitPane>
+   </children>
+</VBox>

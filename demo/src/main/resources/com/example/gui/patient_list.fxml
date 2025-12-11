@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="CENTER" spacing="10.0" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.gui.PatientListController">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+   <children>
+      <Label styleClass="label-title" text="Listado de Pacientes" />
+      <TableView fx:id="patientTable" prefHeight="400.0" prefWidth="600.0" VBox.vgrow="ALWAYS">
+        <columns>
+          <TableColumn fx:id="colId" prefWidth="100.0" text="Identificación" />
+          <TableColumn fx:id="colName" prefWidth="200.0" text="Nombre" />
+          <TableColumn fx:id="colAge" prefWidth="50.0" text="Edad" />
+          <TableColumn fx:id="colEps" prefWidth="100.0" text="EPS" />
+          <TableColumn fx:id="colPhone" prefWidth="100.0" text="Teléfono" />
+        </columns>
+         <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
+      </TableView>
+   </children>
+</VBox>
