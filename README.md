@@ -113,3 +113,8 @@ INSTALACIÓN MAVEN WINDOWS
 4.  Verificar: mvn -version
 
 5.  Ejecutar proyecto: cd mvn javafx:run
+
+
+UML
+![alt text](image.png)
+![alt text](image-1.png)
